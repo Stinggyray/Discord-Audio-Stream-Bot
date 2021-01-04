@@ -125,7 +125,7 @@ public class CommandContext {
         if(author == null) {
             throw new RuntimeException("Failed to get your guild member info");
         }
-        if(!author.hasPermission(Permission.ADMINISTRATOR)) {
+        if(!author.hasPermission(Permission.ADMINISTRATOR) && !this.isAppOwner()) {
             throw new InsufficientPermissionsException(command, this);
         }
         return guild;
@@ -136,5 +136,10 @@ public class CommandContext {
         if(!author.equals(appInfo.getOwner())) {
             throw new InsufficientPermissionsException(command, this);
         }
+    }
+
+    public boolean isAppOwner() {
+        ApplicationInfo appInfo = jda.retrieveApplicationInfo().complete();
+        return author.equals(appInfo.getOwner());
     }
 }
